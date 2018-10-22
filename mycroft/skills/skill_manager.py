@@ -125,22 +125,6 @@ class SkillManager(Thread):
             ), versioned=msm_config['versioned']
         )
 
-    @staticmethod
-    def load_skills_data() -> dict:
-        """Contains info on how skills should be updated"""
-        skills_data_file = expanduser('~/.mycroft/skills.json')
-        if isfile(skills_data_file):
-            with open(skills_data_file) as f:
-                return json.load(f)
-        else:
-            return {}
-
-    @staticmethod
-    def write_skills_data(data: dict):
-        skills_data_file = expanduser('~/.mycroft/skills.json')
-        with open(skills_data_file, 'w') as f:
-            json.dump(data, f)
-
     def schedule_now(self, message=None):
         self.next_download = time.time() - 1
 
@@ -189,11 +173,16 @@ class SkillManager(Thread):
         default_names = set(chain(default_groups['default'], platform_groups))
         default_skill_errored = False
 
-        skills_data = self.load_skills_data()
+        def get_skill_data(skill_name):
+            for e in msm.skills_data.get('skills', []):
+                if e.get('name') == skill_name:
+                    return e
+            else:
+                return {}
 
         def install_or_update(skill):
             """Install missing defaults and update existing skills"""
-            if skills_data.get(skill.name, {}).get('beta'):
+            if get_skill_data(skill.name).get('beta'):
                 skill.sha = 'HEAD'
             if skill.is_local:
                 skill.update()
@@ -213,13 +202,13 @@ class SkillManager(Thread):
             installed_skills.add(skill.name)
 
         try:
-            self.msm.apply(install_or_update, self.msm.list())
+            with self.msm.lock:
+                self.msm.skills_data = self.msm.load_skills_data()
+                self.msm.apply(install_or_update, self.msm.list())
+                self.msm.write_skills_data(self.msm.skills_data)
         except MsmException as e:
             LOG.error('Failed to update skills: {}'.format(repr(e)))
 
-        for skill_name in installed_skills:
-            skills_data.setdefault(skill_name, {})['installed'] = True
-        self.write_skills_data(skills_data)
         self.save_installed_skills(installed_skills)
 
         if speak:
