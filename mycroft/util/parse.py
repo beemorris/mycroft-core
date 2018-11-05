@@ -102,10 +102,12 @@ def extract_number(text, short_scale=True, ordinals=False, lang="en-us"):
         return extractnumber_sv(text)
     elif lang_lower.startswith("de"):
         return extractnumber_de(text)
+    elif lang_lower.startswith("cnh"):
+        return extractnumber_cnh(text)
     # TODO: extractnumber_xx for other languages
     LOG.warning('Language "{}" not recognized! Please make sure your '
                 'language is one of the following: '
-                'en, es, pt, it, fr, sv, de.'.format(lang_lower))
+                'en, es, pt, it, fr, sv, de, cnh.'.format(lang_lower))
     return text
 
 
