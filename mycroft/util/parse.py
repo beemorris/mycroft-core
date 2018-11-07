@@ -29,6 +29,9 @@ from mycroft.util.lang.parse_fr import extractnumber_fr
 from mycroft.util.lang.parse_fr import extract_datetime_fr
 from mycroft.util.lang.parse_fr import normalize_fr
 from mycroft.util.lang.parse_cnh import *
+from mycroft.util.lang.parse_cnh import normalize_cnh
+from mycroft.util.lang.parse_cnh import extractnumber_cnh
+from mycroft.util.lang.parse_cnh import extract_datetime_cnh
 
 from mycroft.util.lang.parse_common import *
 from .log import LOG

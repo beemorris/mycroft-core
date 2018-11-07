@@ -19,7 +19,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 
 from mycroft.util.lang.parse_common import is_numeric, look_for_fractions
-from mycroft.util.lang.format_en import NUM_STRING_EN, LONG_SCALE_EN, \
+from mycroft.util.lang.format_cnh import NUM_STRING_EN, LONG_SCALE_EN, \
     SHORT_SCALE_EN
 
 SHORT_ORDINAL_STRING_EN = {
@@ -109,7 +109,7 @@ LONG_ORDINAL_STRING_EN = {
 }
 
 
-def extractnumber_en(text, short_scale=True, ordinals=False):
+def extractnumber_cnh(text, short_scale=True, ordinals=False):
     """
     This function extracts a number from a text string,
     handles pronunciations in long scale and short scale
@@ -280,7 +280,7 @@ def extractnumber_en(text, short_scale=True, ordinals=False):
     return val
 
 
-def extract_datetime_en(string, dateNow, default_time):
+def extract_datetime_cnh(string, dateNow, default_time):
     """ Convert a human date reference into an exact datetime
 
     Convert things like
@@ -952,7 +952,7 @@ def extract_datetime_en(string, dateNow, default_time):
     return [extractedDate, resultStr]
 
 
-def isFractional_en(input_str, short_scale=True):
+def isFractional_cnh(input_str, short_scale=True):
     """
     This function takes the given text and checks if it is a fraction.
 
@@ -981,7 +981,7 @@ def isFractional_en(input_str, short_scale=True):
     return False
 
 
-def normalize_en(text, remove_articles):
+def normalize_cnh(text, remove_articles):
     """ English string normalization """
 
     words = text.split()  # this also removed extra spaces
